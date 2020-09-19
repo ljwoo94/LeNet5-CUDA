@@ -7,6 +7,7 @@ This is HW4 for 'Multi-core and GPU Programming 2020 Spring' at Yonsei Universit
 - Professor: [Jinho Lee](http://acsys.yonsei.ac.kr/)
 - Teaching Assistant: [Sejong Yang](https://yangspace.co.kr/)
 - Teaching Assistant: Hohyun Kim
+- Student: Jungwoo Lee
 
 ## 1 Related Things
 
@@ -110,22 +111,7 @@ However, you can change the class structure at your will if you are not happy wi
 Check `model/main.py` to see original python code. 
 Check `src/LeNet5_cpu.cpp` to see converted c++ referenced code.
 
-### Step 3: Compile and Submit to run on condor server(NOT SUBMIT to PROFESSOR)
-
-```bash
-user@acsys:/HW4$ make run_on_server 
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o build/util.o -c src/util.cpp 
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o build/LeNet5.o -c src/LeNet5.cpp
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o build/LeNet5_cpu.o -c src/LeNet5_cpu.cpp
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o build/LeNet5_cuda.o -c src/LeNet5_cuda.cu
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o build/main.o -c src/main.cpp 
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o predict build/main.o build/util.o build/LeNet5_cpu.o build/LeNet5_cuda.o build/LeNet5.o
-condor_submit predict.cmd
-Submitting job(s).
-1 job(s) submitted to cluster 29608.
-```
-
-### Step 4: Check the result
+### Step 3: Check the result
 
 ```bash
 user@acsys:/HW4$ ls tmp/
@@ -179,14 +165,6 @@ Correct
 CPU error:20% GPU error:20%
 ```
 
-### Step 5: Have fun speeding up!
-
-- Matrix Multiplication Techniques
-- Im2Col
-- Relu, FC, etc
-
-- (We will check the performance with batch=1 and batch=128)
-
 ## 4 Criteria
 - You should implement the entire LeNet-5 with cuda 
 - Your kernels should be functionally equivalent to the cpu version
@@ -196,41 +174,6 @@ We have set a huge margin of +-5% for the difference of the cuda version and the
 However, it is your job to make sure to cudaMemcpy() so that the function still works correctly.
 - No external libraries. Especially cuDNN. If you think you need something and it's not about cuda programming, contact us before doing so.
 - As in HW3, we will measure the performance of batchsize=1 and batchsize=128, and use the product of the two.
-
-## 5 Report
-Your report should include
-- What techniques you have implemented
-- How to run your code
-- How each technique affected your performance (+ comparison)
-- Why you think your technique, or your combination of techniques produced the best result
-- This does not mean that it's a good idea to have the four items above as your report's section names.
-- This does not mean that those four items above are all you need in the report. 
-- You're supposed to show us how much you know, how much you've studied, and how much effort you've put to finish this assignment, 
-- max 4 pages (firm, including the cover and references if you have those) 
-- PDF only
-- If 4 pages is to short to contain everything you want to say, use a double-column format (e.g.,  https://ieeecs-media.computer.org/assets/zip/Trans_final_submission.zip , https://ieeecs-media.computer.org/assets/zip/ieeetran-final_sub.zip )
-
-## 6 Grading
-- Correct parallel implementation (40) - finish within 1 minute, produce correct result with full CUDA implementation
-- Report (25) - Refer to 5. Report
-- Ranking (35) -  35 * (91 - rank)/90. The ranking is decided by comparing the product of two inputs (batch=1 and batch=128). We will announce the current top score at least once a week.
-
-
-## 7 Plus Alpha
-
-### 7-1 Pretrained Model
-
-There is a pre-trained model at `model/values.txt`. Loading pre-trained model from the txt file is already implemented in `src/LeNet5.cpp`.
-
-You can refer to pretrained-model(`model/lenet5-cifar10-epoch_100.pth`), activations(`*_index_0.txt`) and code(`model/.main.py`).
-
-Activations are result of each layer with index 0 image(cat) at test data.
-
-### 7-2 Hello, World!
-
-I made a hello world example for you.
-
-There are cpu version and cuda version.
 
 #### CPU
 
