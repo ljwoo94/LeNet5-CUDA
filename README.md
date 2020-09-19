@@ -7,7 +7,7 @@ This is HW4 for 'Multi-core and GPU Programming 2020 Spring' at Yonsei Universit
 - Professor: [Jinho Lee](http://acsys.yonsei.ac.kr/)
 - Teaching Assistant: [Sejong Yang](https://yangspace.co.kr/)
 - Teaching Assistant: Hohyun Kim
-- Student: Jungwoo Lee
+- Student: [Jungwoo Lee](http://github.com/ljwoo94/)
 
 ## 1 Related Things
 
@@ -22,7 +22,6 @@ There are two convolution layers and max-pooling layers. Then three fully connec
 The CIFAR-10 dataset consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. You will use 10000 test images to inference the class of image.
 
 ![cifar10_samples.PNG](image/cifar10_samples.PNG)
-
 ## 2 Explanation about the structure of skeleton code
 
 ```bash
@@ -68,20 +67,6 @@ user@acsys:/HW4$ tree .
 
 6 directories, 28 files
 ```
-
-`./predict help` will print followings description about arguments.(You should compile first!)
-
-```bash
-user@acsys:/HW4$ ./predict help
-[ERROR] Invalid arguments
-Usage: ./predict INPUT_PATH DATA_OFFSET BATCH IMG_PATH_TEMPLATE
-    INPUT_PATH: path to input data, e.g. /nfs/data/cifar10/test_batch.bin
-    DATA_OFFSET: data_offset for input data, e.g. 0
-    BATCH: batch size to inference, e.g. 1
-    IMG_PATH_TEMPLATE: path template to img, %d will data_offset and %s will be label, e.g. tmp/cifar10_test_%d_%s.bmp
-    PARAMETER_PATH: path to parameter, e.g. model/values.txt
-```
-
 ## 3 What you have todo
 
 ### Step 1: Check the data
