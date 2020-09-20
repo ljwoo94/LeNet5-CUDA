@@ -20,7 +20,7 @@ There are two convolution layers and max-pooling layers. Then three fully connec
 
 The CIFAR-10 dataset consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. You will use 10000 test images to inference the class of image.
 
-![cifar10_samples.PNG](image/cifar10_samples.PNG)
+![cifar10_samples.PNG](image/cifar10_sample.png)
 
 ## 2 Explanation about the structure of skeleton code
 
@@ -197,97 +197,15 @@ However, it is your job to make sure to cudaMemcpy() so that the function still 
 - No external libraries. Especially cuDNN. If you think you need something and it's not about cuda programming, contact us before doing so.
 - As in HW3, we will measure the performance of batchsize=1 and batchsize=128, and use the product of the two.
 
-## 5 Report
-Your report should include
-- What techniques you have implemented
-- How to run your code
-- How each technique affected your performance (+ comparison)
-- Why you think your technique, or your combination of techniques produced the best result
-- This does not mean that it's a good idea to have the four items above as your report's section names.
-- This does not mean that those four items above are all you need in the report. 
-- You're supposed to show us how much you know, how much you've studied, and how much effort you've put to finish this assignment, 
-- max 4 pages (firm, including the cover and references if you have those) 
-- PDF only
-- If 4 pages is to short to contain everything you want to say, use a double-column format (e.g.,  https://ieeecs-media.computer.org/assets/zip/Trans_final_submission.zip , https://ieeecs-media.computer.org/assets/zip/ieeetran-final_sub.zip )
+## 5 Model Result
 
-## 6 Grading
-- Correct parallel implementation (40) - finish within 1 minute, produce correct result with full CUDA implementation
-- Report (25) - Refer to 5. Report
-- Ranking (35) -  35 * (91 - rank)/90. The ranking is decided by comparing the product of two inputs (batch=1 and batch=128). We will announce the current top score at least once a week.
+![modelresult](image/analysis.png)
 
+- First fully connected layer consumes the longest runtime and memcpy performed the second longest runtime. 
+- Thus, I tried to use Asynchronous cuda memcpy with multiple streams, but the final performance did not changed. 
+- I built naive CUDA LeNet5 model and applied OMP to optimize.
 
-## 7 Plus Alpha
-
-### 7-1 Pretrained Model
-
-There is a pre-trained model at `model/values.txt`. Loading pre-trained model from the txt file is already implemented in `src/LeNet5.cpp`.
-
-You can refer to pretrained-model(`model/lenet5-cifar10-epoch_100.pth`), activations(`*_index_0.txt`) and code(`model/.main.py`).
-
-Activations are result of each layer with index 0 image(cat) at test data.
-
-### 7-2 Hello, World!
-
-I made a hello world example for you.
-
-There are cpu version and cuda version.
-
-#### CPU
-
-```bash
-user@acsys:/HW4$ make hello_cpu
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o hello_cpu src/hello.cpp 
-./hello_cpu
-Hello, World!
-```
-
-#### CUDA
-
-You can reference this to implment, compile and submit(run on condor) your `LeNet5_cuda`.
-
-```bash
-user@acsys:/HW4$ make hello_cuda
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o hello_cuda src/hello.cu
-```
-
-```bash
-user@acsys:/HW4$ make hello_run_on_server 
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o hello_cuda src/hello.cu 
-condor_submit hello_cuda.cmd
-Submitting job(s).
-1 job(s) submitted to cluster 29601.
-```
-
-```bash
-user@acsys:/HW4$ cat result/hello.out 
-Hello World from host!
-Hello World from device!
-    threadIdx.x: 0
-    blockIdx.x: 0
-    blockDim.x: 3
-Hello World from device!
-    threadIdx.x: 1
-    blockIdx.x: 0
-    blockDim.x: 3
-Hello World from device!
-    threadIdx.x: 2
-    blockIdx.x: 0
-    blockDim.x: 3
-Hello World from device!
-    threadIdx.x: 0
-    blockIdx.x: 1
-    blockDim.x: 3
-Hello World from device!
-    threadIdx.x: 1
-    blockIdx.x: 1
-    blockDim.x: 3
-Hello World from device!
-    threadIdx.x: 2
-    blockIdx.x: 1
-    blockDim.x: 3
-```
-
-## 8 References
+## 6 References
 
 - Lecture Slides
 - [LeCun et al, 1998, Gradient-Based Learning Applied to Document Recognition](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf)
