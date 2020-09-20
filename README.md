@@ -7,6 +7,7 @@ This is HW4 for 'Multi-core and GPU Programming 2020 Spring' at Yonsei Universit
 - Professor: [Jinho Lee](http://acsys.yonsei.ac.kr/)
 - Teaching Assistant: [Sejong Yang](https://yangspace.co.kr/)
 - Teaching Assistant: Hohyun Kim
+- Student: [Jungwoo Lee](https://github.com/ljwoo94/)
 
 ## 1 Related Things
 
@@ -68,19 +69,6 @@ user@acsys:/HW4$ tree .
 6 directories, 28 files
 ```
 
-`./predict help` will print followings description about arguments.(You should compile first!)
-
-```bash
-user@acsys:/HW4$ ./predict help
-[ERROR] Invalid arguments
-Usage: ./predict INPUT_PATH DATA_OFFSET BATCH IMG_PATH_TEMPLATE
-    INPUT_PATH: path to input data, e.g. /nfs/data/cifar10/test_batch.bin
-    DATA_OFFSET: data_offset for input data, e.g. 0
-    BATCH: batch size to inference, e.g. 1
-    IMG_PATH_TEMPLATE: path template to img, %d will data_offset and %s will be label, e.g. tmp/cifar10_test_%d_%s.bmp
-    PARAMETER_PATH: path to parameter, e.g. model/values.txt
-```
-
 ## 3 What you have todo
 
 ### Step 1: Check the data
@@ -110,22 +98,7 @@ However, you can change the class structure at your will if you are not happy wi
 Check `model/main.py` to see original python code. 
 Check `src/LeNet5_cpu.cpp` to see converted c++ referenced code.
 
-### Step 3: Compile and Submit to run on condor server(NOT SUBMIT to PROFESSOR)
-
-```bash
-user@acsys:/HW4$ make run_on_server 
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o build/util.o -c src/util.cpp 
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o build/LeNet5.o -c src/LeNet5.cpp
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o build/LeNet5_cpu.o -c src/LeNet5_cpu.cpp
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o build/LeNet5_cuda.o -c src/LeNet5_cuda.cu
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o build/main.o -c src/main.cpp 
-/usr/local/cuda-10.2/bin/nvcc -I/usr/local/include/opencv4/opencv -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_dnn -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -o predict build/main.o build/util.o build/LeNet5_cpu.o build/LeNet5_cuda.o build/LeNet5.o
-condor_submit predict.cmd
-Submitting job(s).
-1 job(s) submitted to cluster 29608.
-```
-
-### Step 4: Check the result
+### Step 3: Check the result
 
 ```bash
 user@acsys:/HW4$ ls tmp/
@@ -178,14 +151,6 @@ Correct
 
 CPU error:20% GPU error:20%
 ```
-
-### Step 5: Have fun speeding up!
-
-- Matrix Multiplication Techniques
-- Im2Col
-- Relu, FC, etc
-
-- (We will check the performance with batch=1 and batch=128)
 
 ## 4 Criteria
 - You should implement the entire LeNet-5 with cuda 
